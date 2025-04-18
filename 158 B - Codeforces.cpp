@@ -1,68 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define ll long long int
-#define ull unsigned long long int
-#define nl '\n'
-#define fast ios_base::sync_with_stdio(false); cin.tie(NULL);
-#define ttt int t; cin >> t; while(t--)
-#define FILLarr(a,n) for(long long int i=0; i<n; i++){cin>>a[i];}
-#define FILLvec(a,n) for(long long int i=0; i<n; i++){long long int xxs; cin >> xxs; a.push_back(xxs);}
-#define reversei(a) reverse(a.begin(), a.end());
-
 int main() {
-    fast;
-
     int n;
-    cin>>n;
-    ll taxis=0;
-    ll available_seats=4;
-    int groups[n];
-    ll groupsCnt[5]={0};
-
-    for(long long int i=0; i<n; i++) {
-        cin>>groups[i];
-        switch(groups[i]){
-        case 1:
-            groupsCnt[1]++;
-            break;
-        case 2:
-            groupsCnt[2]++;
-            break;
-        case 3:
-            groupsCnt[3]++;
-            break;
-        case 4:
-            groupsCnt[1]++;
-            break;
+    cin >> n;
+    vector<int> s(n);
+    int count1 = 0, count2 = 0, count3 = 0, count4 = 0;
+    for (int i = 0; i < n; ++i) {
+        cin >> s[i];
+        if (s[i] == 1) {
+            count1++;
+        } else if (s[i] == 2) {
+            count2++;
+        } else if (s[i] == 3) {
+            count3++;
+        } else {
+            count4++;
         }
     }
 
-    sort(groups, groups+n, greater<int>());
+    int taxis = count4;
 
-    for(ll i=0; i<n; i++){
-        if(groups[i]<available_seats){
-            available_seats -= groups[i];
-            groupsCnt[groups[i]]--;
-            if(groupsCnt[available_seats]>0){
-                groupsCnt[available_seats]--;
-                for(ll j=i; j<n; j++){
-                    if(groups[j] == available_seats){
-                        groups[j]=0;
-                        break;
-                    }
-                }
-                taxis++;
-                available_seats=4;
-            }
-        }
-        else{
-            taxis++;
-            available_seats=4;
-        }
+    taxis += count3;
+    count1 = max(0, count1 - count3); // adding count1 group(s) with count4 group(s)
+
+    taxis += count2 / 2;
+    count2 %= 2;
+
+    if (count2 == 1) {
+        taxis++;
+        count1 = max(0, count1 - 2);
     }
 
-    cout << taxis << nl;
+    taxis += ceil((double)count1 / 4.0);
+
+    cout << taxis << endl;
 
     return 0;
 }

@@ -1,41 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define ll long long int
-#define nl "\n"
-#define fast ios_base::sync_with_stdio(false); cin.tie(NULL);
-#define ttt int t; cin >> t; while(t--)
+int gcd(int a, int b) {
+    while (b) {
+        a %= b;
+        swap(a, b);
+    }
+    return a;
+}
 
-int main()
-{
-    fast;
-
-    ttt
-    {
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
         int n;
         cin >> n;
-
-        vector<int> permutation(n);
-
-        for(int i=0; i<n; i++){
-            cin >> permutation[i];
+        vector<int> p(n);
+        vector<int> distances;
+        bool unsorted = false;
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+            if (p[i] != i + 1) {
+                distances.push_back(abs(i + 1 - p[i]));
+                unsorted = true;
+            }
         }
 
-        vector<int> index(n);
-
-        for(int i=0; i<n; i++){
-            index[permutation[i]-1] = i;
+        if (!unsorted) {
+            cout << n - 1 << endl;
+            continue;
         }
 
-        int maxK = 0;
-
-        for(int i=n-1; i>=0; i--) {
-            int j = index[i];
-            maxK = max(maxK, i-j);
+        if (distances.empty()) {
+            cout << n - 1 << endl;
+        } else {
+            int result_gcd = distances[0];
+            for (size_t i = 1; i < distances.size(); ++i) {
+                result_gcd = gcd(result_gcd, distances[i]);
+            }
+            cout << result_gcd << endl;
         }
-
-        cout << maxK << nl;
     }
-
     return 0;
 }
